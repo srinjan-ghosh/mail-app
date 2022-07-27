@@ -1,8 +1,13 @@
 spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          github:
-            client-id: Iv1.83ff90d7216315e6
-            client-secret: c4c9f3b18a8ad214282a1b8b34cda420ef43347f
+    security:
+        oauth2:
+            client:
+                registration:
+                    github:
+                        client-id: Iv1.83ff90d7216315e6
+                        client-secret: c4c9f3b18a8ad214282a1b8b34cda420ef43347f
+    data:
+        mongodb:
+            uri: mongodb+srv://root:root1234@cluster0.g5s6e.mongodb.net/?retryWrites=true&w=majority
+            database: mailApp
+
