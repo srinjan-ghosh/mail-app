@@ -15,10 +15,12 @@ public class MailAppApplication {
 		SpringApplication.run(MailAppApplication.class, args);
 	}
 
+	// using github oauth login
+
 	@RequestMapping("/user")
 	public String user(@AuthenticationPrincipal OAuth2User principal) {
 		System.out.println(principal);
-		return principal.getAttribute("login");
+		return "Login Id:"+principal.getAttribute("login")+" Id: "+ principal.getAttribute("id");
 	}
 
 }
