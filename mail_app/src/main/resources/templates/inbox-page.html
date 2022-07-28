@@ -84,8 +84,7 @@
                     >
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-1" th:text="${email.subject}">Subject</h5>
-                            <small th:text="${email.key.timeUuid}">3 days ago</small>
-                            <!-- <small >3 days ago</small> -->
+                            <small th:text="${email.agoTimeString}">3 days ago</small>
                         </div>
                         <p class="mb-1"><span>From: </span><span th:text="${email.to}">Sender</span></p>
                     </a>

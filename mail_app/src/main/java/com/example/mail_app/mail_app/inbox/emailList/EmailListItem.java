@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(value="messages_by_user_folder")
@@ -17,6 +18,17 @@ public class EmailListItem {
     private String subject;
 
     private boolean isUnread;
+
+    @Transient
+    private String agoTimeString;
+
+    public String getAgoTimeString() {
+        return agoTimeString;
+    }
+
+    public void setAgoTimeString(String agoTimeString) {
+        this.agoTimeString = agoTimeString;
+    }
 
     public EmailListItemKey getKey() {
         return key;
