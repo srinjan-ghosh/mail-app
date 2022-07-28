@@ -38,7 +38,7 @@ public class MailAppApplication {
 		//delete all before inserting. Testing purposes
 		folderRepository.deleteAll();;
 
-		folderRepository.save(new Folder("srinjan-ghosh", "Inbox", "blue"));
+		folderRepository.save(new Folder("srinjan-ghosh", "User Inbox", "blue"));
 		folderRepository.save(new Folder("srinjan-ghosh", "Sent", "green"));
 		folderRepository.save(new Folder("srinjan-ghosh", "Important", "yellow"));
 

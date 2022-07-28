@@ -53,25 +53,22 @@
     </style>
   </head>
   <body>
-    <!-- <div class="container">
+    <div class="container">
       <header>
-        <h1>Welcome, Name</h1>
+        <h1>Welcome, <span th:text="${userId}">userId</span></h1>
       </header>
 
       <nav>
-        <div class="card">
-          <a href="/compose" class="btn btn-primary">Compose message</a>
-        </div>
         <div
-            th:insert="components/folder-list :: folder-list (panelName = 'Folders', folders = ${defaultFolders}, folderToUnreadCounts = ${folderToUnreadCounts})"
+            th:insert="components/folder-list :: folder-list (panelName = 'Folders', folders = ${defaultFolders})"
           ></div>
           <div
-            th:insert="components/folder-list :: folder-list (panelName = 'My folders', folders = ${userFolders}, folderToUnreadCounts = ${folderToUnreadCounts})"
+            th:insert="components/folder-list :: folder-list (panelName = 'My folders', folders = ${userFolders})"
           ></div>
       </nav>
       
       <main>
-        <div class="card">
+        <!-- <div class="card">
             <div class="card-header">Inbox</div>
             <div class="card-body">
         <div class="list-group">
@@ -84,15 +81,12 @@
             </a>
           </div>
           </div>
-          </div>
+          </div> -->
+          <p>Email List</p>
       </main>
 
       <footer>
       </footer>
-    </div> -->
-    <h1>Inbox</h1>
-    <div th:each="folder : ${userFolders}">
-        <p th:text="${folder.label}"></p>
     </div>
   </body>
 </html>
