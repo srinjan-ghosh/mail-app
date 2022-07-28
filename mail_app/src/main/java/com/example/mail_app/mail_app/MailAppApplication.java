@@ -14,6 +14,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.mail_app.mail_app.inbox.email.Email;
+import com.example.mail_app.mail_app.inbox.email.EmailRepository;
 import com.example.mail_app.mail_app.inbox.emailList.EmailListItem;
 import com.example.mail_app.mail_app.inbox.emailList.EmailListItemKey;
 import com.example.mail_app.mail_app.inbox.emailList.EmailListRepository;
@@ -27,6 +29,7 @@ public class MailAppApplication {
 
 	@Autowired FolderRepository folderRepository;
 	@Autowired EmailListRepository emailListRepository;
+	@Autowired EmailRepository emailRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MailAppApplication.class, args);
@@ -44,8 +47,8 @@ public class MailAppApplication {
 	public void init() {
 		//delete all before inserting. Testing purposes
 		folderRepository.deleteAll();
-
 		emailListRepository.deleteAll();
+		emailRepository.deleteAll();
 
 		folderRepository.save(new Folder("srinjan-ghosh", "User Inbox", "blue"));
 		folderRepository.save(new Folder("srinjan-ghosh", "Sent", "green"));
@@ -59,11 +62,20 @@ public class MailAppApplication {
 
 			EmailListItem item = new EmailListItem();
 			item.setKey(key);
-			item.setTo(Arrays.asList("srinjan-ghosh"));
+			item.setTo(Arrays.asList("srinjan-ghosh", "xyz"));
 			item.setSubject("Subject"+i);
 			item.setUnread(true);
 
 			emailListRepository.save(item);
+
+			Email email = new Email();
+			email.setId(key.getTimeUuid());
+			email.setFrom("srinjan-ghosh");
+			email.setSubject(item.getSubject());
+			email.setBody("Body"+i);
+			email.setTo(item.getTo());
+
+			emailRepository.save(email);
 		}
 
 	}

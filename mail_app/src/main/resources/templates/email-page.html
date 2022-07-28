@@ -69,23 +69,24 @@
       
       <main>
         <div class="card">
-            <div class="card-header" th:text="${folderName}">Inbox</div>
-            <div class="card-body">
-                <div class="list-group">
-                    <a th:href="@{'/email/' + ${email.key.timeUuid}} + '?folder=' + ${currentFolder}" 
-                        href="#" class="list-group-item list-group-item-action" 
-                        th:classappend="${email.isUnread} ? regular : bold" 
-                        aria-current="true" 
-                        th:each="email : ${emailList}"
-                    >
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1" th:text="${email.subject}">Subject</h5>
-                            <small th:text="${email.agoTimeString}">3 days ago</small>
-                        </div>
-                        <p class="mb-1"><span>From: </span><span th:text="${email.to}">Sender</span></p>
-                    </a>
+            <div class="card-header">View Email</div>
+            <dl class="card-body">
+                <div class="mb-3">
+                <dt class="form-label">From</dt>
+                <dd th:text="${email.from}"></dd>
                 </div>
-            </div>
+                <div class="mb-3">
+                    <dt class="form-label">To</dt>
+                    <dd th:text="${toIds}"></dd>
+                </div>
+                <div class="mb-3">
+                    <dt class="form-label">Subject</dt>
+                    <dd th:text="${email.subject}"></dd>
+                </div>
+                <div class="mb-3">
+                    <dt class="form-label">Body</dt>
+                    <dd th:text="${email.body}"></dd>
+                </div>
         </div>
       </main>
 

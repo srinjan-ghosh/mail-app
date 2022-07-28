@@ -1,38 +1,37 @@
 package com.example.mail_app.mail_app.inbox.controllers;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
-import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
-import com.example.mail_app.mail_app.inbox.emailList.EmailListItem;
-import com.example.mail_app.mail_app.inbox.emailList.EmailListRepository;
+import com.example.mail_app.mail_app.inbox.email.Email;
+import com.example.mail_app.mail_app.inbox.email.EmailRepository;
 import com.example.mail_app.mail_app.inbox.folders.Folder;
 import com.example.mail_app.mail_app.inbox.folders.FolderRepository;
 import com.example.mail_app.mail_app.inbox.folders.FolderService;
 
 @Controller
-public class InboxController {
+public class EmailViewController {
 
     @Autowired private FolderRepository folderRepository;
     @Autowired private FolderService folderService;
-    @Autowired private EmailListRepository emailListRepository;
+    @Autowired private EmailRepository emailRepository;
     
-    @GetMapping("/")
-    public String homePage(@AuthenticationPrincipal OAuth2User principal, Model model, @RequestParam(required=false) String folder) {
+    @GetMapping("/email/{id}")
+    public String emailView(@AuthenticationPrincipal OAuth2User principal, Model model, @PathVariable long id) {
         // if(principal == null|| !StringUtils.hasText(principal.getAttribute("name"))){
         if(principal == null){
             return "index";
         }
 
+        // show the folders
         String userId = principal.getAttribute("login");
         model.addAttribute("userId", userId);
         List<Folder> userFolders = folderRepository.findAllByUserId(userId);
@@ -41,21 +40,17 @@ public class InboxController {
         List<Folder> defaultFolders = folderService.fetchDefaultFolders(userId);
         model.addAttribute("defaultFolders", defaultFolders);
 
-        //fetch messages
-        if(!StringUtils.hasText(folder)){
-            folder = "Inbox";
+        // show the emails
+        Optional<Email> optionalEmail = emailRepository.findById(id);
+        if(!optionalEmail.isPresent()) {
+            return "inbox-page";
         }
-        
-        List<EmailListItem> emailList = emailListRepository.findAllByKey_IdAndKey_Label(userId, folder);
-        PrettyTime prettyTime = new PrettyTime();
-        emailList.stream().forEach(emailItem -> {
-            long time = emailItem.getKey().getTimeUuid();
-            Date emailDateTime = new Date(time);
-            emailItem.setAgoTimeString(prettyTime.format(emailDateTime));
-        });
-        model.addAttribute("emailList", emailList);
-        model.addAttribute("folderName", folder);
 
-        return "inbox-page";
+        Email email = optionalEmail.get();
+        String toIds = String.join(", ", email.getTo());
+
+        model.addAttribute("email", optionalEmail.get());
+        model.addAttribute("toIds", toIds);
+        return "email-page";
     }
 }
