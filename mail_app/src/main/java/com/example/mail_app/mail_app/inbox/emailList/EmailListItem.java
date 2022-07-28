@@ -1,7 +1,6 @@
 package com.example.mail_app.mail_app.inbox.emailList;
 
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;

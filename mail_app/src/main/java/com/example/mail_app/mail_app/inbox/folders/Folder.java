@@ -1,6 +1,5 @@
 package com.example.mail_app.mail_app.inbox.folders;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(value = "folders_by_user")

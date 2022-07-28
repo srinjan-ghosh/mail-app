@@ -1,6 +1,5 @@
 package com.example.mail_app.mail_app.inbox.emailList;
 
-import java.util.UUID;
 
 public class EmailListItemKey {
 

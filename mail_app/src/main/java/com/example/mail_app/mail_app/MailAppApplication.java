@@ -2,7 +2,6 @@ package com.example.mail_app.mail_app;
 
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.UUID;
 
 import javax.annotation.PostConstruct;
 
