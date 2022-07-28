@@ -1,5 +1,9 @@
 package com.example.mail_app.mail_app;
 
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.UUID;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +15,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.mail_app.mail_app.inbox.emailList.EmailListItem;
+import com.example.mail_app.mail_app.inbox.emailList.EmailListItemKey;
+import com.example.mail_app.mail_app.inbox.emailList.EmailListRepository;
 import com.example.mail_app.mail_app.inbox.folders.Folder;
 import com.example.mail_app.mail_app.inbox.folders.FolderRepository;
 
@@ -20,6 +27,7 @@ import com.example.mail_app.mail_app.inbox.folders.FolderRepository;
 public class MailAppApplication {
 
 	@Autowired FolderRepository folderRepository;
+	@Autowired EmailListRepository emailListRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MailAppApplication.class, args);
@@ -36,11 +44,28 @@ public class MailAppApplication {
 	@PostConstruct
 	public void init() {
 		//delete all before inserting. Testing purposes
-		folderRepository.deleteAll();;
+		folderRepository.deleteAll();
+
+		emailListRepository.deleteAll();
 
 		folderRepository.save(new Folder("srinjan-ghosh", "User Inbox", "blue"));
 		folderRepository.save(new Folder("srinjan-ghosh", "Sent", "green"));
 		folderRepository.save(new Folder("srinjan-ghosh", "Important", "yellow"));
+
+		for(int i=0;i<10;i++){
+			EmailListItemKey key = new EmailListItemKey();
+			key.setId("srinjan-ghosh");
+			key.setLabel("Inbox");
+			key.setTimeUuid(Calendar.getInstance().getTimeInMillis());
+
+			EmailListItem item = new EmailListItem();
+			item.setKey(key);
+			item.setTo(Arrays.asList("srinjan-ghosh"));
+			item.setSubject("Subject"+i);
+			item.setUnread(true);
+
+			emailListRepository.save(item);
+		}
 
 	}
 

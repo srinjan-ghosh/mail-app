@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.mail_app.mail_app.inbox.emailList.EmailListItem;
+import com.example.mail_app.mail_app.inbox.emailList.EmailListRepository;
 import com.example.mail_app.mail_app.inbox.folders.Folder;
 import com.example.mail_app.mail_app.inbox.folders.FolderRepository;
 import com.example.mail_app.mail_app.inbox.folders.FolderService;
@@ -17,8 +19,9 @@ import com.example.mail_app.mail_app.inbox.folders.FolderService;
 @Controller
 public class InboxController {
 
-    @Autowired FolderRepository folderRepository;
-    @Autowired FolderService folderService; 
+    @Autowired private FolderRepository folderRepository;
+    @Autowired private FolderService folderService;
+    @Autowired private EmailListRepository emailListRepository;
     
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal OAuth2User principal, Model model) {
@@ -34,6 +37,11 @@ public class InboxController {
 
         List<Folder> defaultFolders = folderService.fetchDefaultFolders(userId);
         model.addAttribute("defaultFolders", defaultFolders);
+
+        //fetch messages
+        String folderLabel = "Inbox";
+        List<EmailListItem> emailList = emailListRepository.findAllByKey_IdAndKey_Label(userId, folderLabel);
+        model.addAttribute("emailList", emailList);
 
         return "inbox-page";
     }
