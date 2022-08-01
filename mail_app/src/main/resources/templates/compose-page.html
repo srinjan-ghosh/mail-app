@@ -59,9 +59,6 @@
       </header>
 
       <nav>
-        <div class="card">
-          <a href="/compose" class="btn btn-primary">Compose Message</a>
-        </div>
         <div
             th:insert="components/folder-list :: folder-list (panelName = 'Folders', folders = ${defaultFolders})"
           ></div>
@@ -72,31 +69,53 @@
       
       <main>
         <div class="card">
-            <div class="card-header">View Email</div>
-            <div class="card-body">
-              <dl>
-                <div class="mb-3">
-                  <dt class="form-label">From</dt>
-                  <dd th:text="${email.from}"></dd>
-                </div>
-                <div class="mb-3">
-                    <dt class="form-label">To</dt>
-                    <dd th:text="${toIds}"></dd>
-                </div>
-                <div class="mb-3">
-                    <dt class="form-label">Subject</dt>
-                    <dd th:text="${email.subject}"></dd>
-                </div>
-                <div class="mb-3">
-                    <dt class="form-label">Body</dt>
-                    <dd th:text="${email.body}"></dd>
-                </div>
-              </dl>
-              <div>
-                <a th:href="@{'/compose?to=' + ${email.from}}" type="button" class="btn btn-primary">Reply</button>
-                <a th:href="@{'/compose?to=' + ${email.from} + ',' + ${toIds}}" type="button" class="btn btn-primary">Reply All</a>
+          <div class="card-header">Compose</div>
+          <div class="card-body">
+            <form th:attr="action=@{/sendEmail}" method="POST">
+              <input
+                type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}"
+              />
+              <div class="mb-3">
+                <label for="toUserIds" class="form-label"
+                  >To</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="toUserIds"
+                  name="toUserIds"
+                  th:value="${toIds}"
+                  placeholder="Enter comma separated Github User IDs"
+                />
               </div>
-            </div>
+              <div class="mb-3">
+                <label for="subject" class="form-label"
+                  >Subject</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="subject"
+                  name="subject"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="body" class="form-label"
+                  >Body</label
+                >
+                <textarea
+                  class="form-control"
+                  id="body"
+                  name="body"
+                  rows="20"
+                ></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Send</button>
+              <a href="/" type="submit" class="btn btn-secondary">Cancel</a>
+            </form>
+          </div>
         </div>
       </main>
 
