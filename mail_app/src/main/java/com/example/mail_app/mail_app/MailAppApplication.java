@@ -18,7 +18,7 @@ import com.example.mail_app.mail_app.inbox.email.Email;
 import com.example.mail_app.mail_app.inbox.email.EmailRepository;
 import com.example.mail_app.mail_app.inbox.emailList.EmailListItem;
 import com.example.mail_app.mail_app.inbox.emailList.EmailListItemKey;
-import com.example.mail_app.mail_app.inbox.emailList.EmailListRepository;
+import com.example.mail_app.mail_app.inbox.emailList.EmailListItemRepository;
 import com.example.mail_app.mail_app.inbox.folders.Folder;
 import com.example.mail_app.mail_app.inbox.folders.FolderRepository;
 
@@ -28,7 +28,7 @@ import com.example.mail_app.mail_app.inbox.folders.FolderRepository;
 public class MailAppApplication {
 
 	@Autowired FolderRepository folderRepository;
-	@Autowired EmailListRepository emailListRepository;
+	@Autowired EmailListItemRepository emailListItemRepository;
 	@Autowired EmailRepository emailRepository;
 
 	public static void main(String[] args) {
@@ -47,7 +47,7 @@ public class MailAppApplication {
 	public void init() {
 		//delete all before inserting. Testing purposes
 		folderRepository.deleteAll();
-		emailListRepository.deleteAll();
+		emailListItemRepository.deleteAll();
 		emailRepository.deleteAll();
 
 		folderRepository.save(new Folder("srinjan-ghosh", "User Inbox", "blue"));
@@ -66,7 +66,7 @@ public class MailAppApplication {
 			item.setSubject("Subject"+i);
 			item.setUnread(true);
 
-			emailListRepository.save(item);
+			emailListItemRepository.save(item);
 
 			Email email = new Email();
 			email.setId(key.getTimeUuid());

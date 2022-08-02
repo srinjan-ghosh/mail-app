@@ -3,10 +3,11 @@ package com.example.mail_app.mail_app.inbox.emailList;
 
 public class EmailListItemKey {
 
+    // user id of the persons inbox
     private String id;
 
     private String label;
-    
+    // will be used for message id. Time based
     private long timeUuid;
 
     public String getId() {

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.mail_app.mail_app.inbox.emailList.EmailListItem;
-import com.example.mail_app.mail_app.inbox.emailList.EmailListRepository;
+import com.example.mail_app.mail_app.inbox.emailList.EmailListItemRepository;
 import com.example.mail_app.mail_app.inbox.folders.Folder;
 import com.example.mail_app.mail_app.inbox.folders.FolderRepository;
 import com.example.mail_app.mail_app.inbox.folders.FolderService;
@@ -24,7 +24,7 @@ public class InboxController {
 
     @Autowired private FolderRepository folderRepository;
     @Autowired private FolderService folderService;
-    @Autowired private EmailListRepository emailListRepository;
+    @Autowired private EmailListItemRepository emailListItemRepository;
     
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal OAuth2User principal, Model model, @RequestParam(required=false) String folder) {
@@ -46,7 +46,7 @@ public class InboxController {
             folder = "Inbox";
         }
         
-        List<EmailListItem> emailList = emailListRepository.findAllByKey_IdAndKey_Label(userId, folder);
+        List<EmailListItem> emailList = emailListItemRepository.findAllByKey_IdAndKey_LabelOrderByKey_TimeUuidDesc(userId, folder);
         PrettyTime prettyTime = new PrettyTime();
         emailList.stream().forEach(emailItem -> {
             long time = emailItem.getKey().getTimeUuid();

@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Email {
     
     @Id
-    private long id; // same as the timeUuid from email list item
+    private long id; // same as the timeUuid from email list item, this is message id
     private String from;
     private List<String> to;
     private String subject;
