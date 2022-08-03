@@ -62,6 +62,8 @@ public class MailAppApplication {
 			emailService.sendEmail("srinjan-ghosh", Arrays.asList("srinjan-ghosh","abc"), "Hello "+i, "Body");
 		}
 
+		emailService.sendEmail("abc", Arrays.asList("xyz","abc"), "Hello ", "Body");
+
 	}
 
 }

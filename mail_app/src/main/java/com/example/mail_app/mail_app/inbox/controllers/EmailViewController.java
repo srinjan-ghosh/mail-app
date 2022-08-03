@@ -64,6 +64,12 @@ public class EmailViewController {
         Email email = optionalEmail.get();
         String toIds = String.join(", ", email.getTo());
 
+        // Check if user is allowed to see the email
+        // else redirect to the home page
+        if(!userId.equals(email.getFrom()) && !email.getTo().contains(userId)) {
+            return "redirect:/";
+        }
+
         model.addAttribute("email", optionalEmail.get());
         model.addAttribute("toIds", toIds);
         
