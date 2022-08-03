@@ -58,7 +58,7 @@ public class InboxController {
             emailItem.setAgoTimeString(prettyTime.format(emailDateTime));
         });
         model.addAttribute("emailList", emailList);
-        model.addAttribute("folderName", folder);
+        model.addAttribute("currentFolder", folder);
 
         return "inbox-page";
     }

@@ -11,12 +11,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.mail_app.mail_app.inbox.email.Email;
 import com.example.mail_app.mail_app.inbox.email.EmailRepository;
+import com.example.mail_app.mail_app.inbox.emailList.EmailListItem;
+import com.example.mail_app.mail_app.inbox.emailList.EmailListItemKey;
+import com.example.mail_app.mail_app.inbox.emailList.EmailListItemRepository;
 import com.example.mail_app.mail_app.inbox.folders.Folder;
 import com.example.mail_app.mail_app.inbox.folders.FolderRepository;
 import com.example.mail_app.mail_app.inbox.folders.FolderService;
+import com.example.mail_app.mail_app.inbox.folders.UnreadEmailStatsService;
 
 @Controller
 public class EmailViewController {
@@ -24,9 +29,16 @@ public class EmailViewController {
     @Autowired private FolderRepository folderRepository;
     @Autowired private FolderService folderService;
     @Autowired private EmailRepository emailRepository;
+    @Autowired private EmailListItemRepository emailListItemRepository;
+    @Autowired private UnreadEmailStatsService unreadEmailStatsService;
     
     @GetMapping("/email/{id}")
-    public String emailView(@AuthenticationPrincipal OAuth2User principal, Model model, @PathVariable long id) {
+    public String emailView(
+        @AuthenticationPrincipal OAuth2User principal,
+        Model model, 
+        @PathVariable long id,
+        @RequestParam String folder
+    ) {
         // if(principal == null|| !StringUtils.hasText(principal.getAttribute("name"))){
         if(principal == null){
             return "index";
@@ -40,9 +52,7 @@ public class EmailViewController {
 
         List<Folder> defaultFolders = folderService.fetchDefaultFolders(userId);
         model.addAttribute("defaultFolders", defaultFolders);
-
-        Map<String, Integer> mapCountToLabels = folderService.mapCountToLabels(userId);
-        model.addAttribute("stats", mapCountToLabels); 
+ 
 
         // show the emails
         Optional<Email> optionalEmail = emailRepository.findById(id);
@@ -55,6 +65,25 @@ public class EmailViewController {
 
         model.addAttribute("email", optionalEmail.get());
         model.addAttribute("toIds", toIds);
+        
+        EmailListItemKey key = new EmailListItemKey();
+        key.setId(userId);
+        key.setLabel(folder);
+        key.setTimeUuid(email.getId());
+
+        Optional<EmailListItem> optionalEmailListItem = emailListItemRepository.findById(key);
+        if(optionalEmailListItem.isPresent()) {
+            EmailListItem emailListItem = optionalEmailListItem.get();
+            if (emailListItem.isUnread()) {
+                emailListItem.setUnread(false);
+                emailListItemRepository.save(emailListItem);
+                unreadEmailStatsService.decrementUnreadCount(userId, folder);
+            }
+        }
+
+        Map<String, Integer> mapCountToLabels = folderService.mapCountToLabels(userId);
+        model.addAttribute("stats", mapCountToLabels);
+
         return "email-page";
     }
 }
