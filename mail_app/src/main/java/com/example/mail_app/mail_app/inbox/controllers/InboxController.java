@@ -2,6 +2,7 @@ package com.example.mail_app.mail_app.inbox.controllers;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,9 @@ public class InboxController {
 
         List<Folder> defaultFolders = folderService.fetchDefaultFolders(userId);
         model.addAttribute("defaultFolders", defaultFolders);
+
+        Map<String, Integer> mapCountToLabels = folderService.mapCountToLabels(userId);
+        model.addAttribute("stats", mapCountToLabels); 
 
         //fetch messages
         if(!StringUtils.hasText(folder)){

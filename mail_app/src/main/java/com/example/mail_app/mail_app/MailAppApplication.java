@@ -1,7 +1,6 @@
 package com.example.mail_app.mail_app;
 
 import java.util.Arrays;
-import java.util.Calendar;
 
 import javax.annotation.PostConstruct;
 
@@ -14,14 +13,11 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.mail_app.mail_app.inbox.email.Email;
 import com.example.mail_app.mail_app.inbox.email.EmailRepository;
-import com.example.mail_app.mail_app.inbox.emailList.EmailListItem;
-import com.example.mail_app.mail_app.inbox.emailList.EmailListItemKey;
+import com.example.mail_app.mail_app.inbox.email.EmailService;
 import com.example.mail_app.mail_app.inbox.emailList.EmailListItemRepository;
 import com.example.mail_app.mail_app.inbox.folders.Folder;
 import com.example.mail_app.mail_app.inbox.folders.FolderRepository;
-import com.example.mail_app.mail_app.inbox.folders.UnreadEmailStats;
 import com.example.mail_app.mail_app.inbox.folders.UnreadEmailStatsRepository;
 import com.example.mail_app.mail_app.inbox.folders.UnreadEmailStatsService;
 
@@ -34,7 +30,9 @@ public class MailAppApplication {
 	@Autowired EmailListItemRepository emailListItemRepository;
 	@Autowired EmailRepository emailRepository;
 	@Autowired UnreadEmailStatsRepository unreadEmailStatsRepository;
+	
 	@Autowired UnreadEmailStatsService unreadEmailStatsService;
+	@Autowired EmailService emailService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MailAppApplication.class, args);
@@ -54,42 +52,14 @@ public class MailAppApplication {
 		folderRepository.deleteAll();
 		emailListItemRepository.deleteAll();
 		emailRepository.deleteAll();
+		unreadEmailStatsRepository.deleteAll();
 
 		folderRepository.save(new Folder("srinjan-ghosh", "User Inbox", "blue"));
 		folderRepository.save(new Folder("srinjan-ghosh", "Sent", "green"));
 		folderRepository.save(new Folder("srinjan-ghosh", "Important", "yellow"));
 
-		unreadEmailStatsRepository.save(new UnreadEmailStats("srinjan-ghosh", "Inbox", 0));
-
-		unreadEmailStatsService.incrementUnreadCount("srinjan-ghosh", "Inbox");
-		unreadEmailStatsService.incrementUnreadCount("srinjan-ghosh", "Inbox");
-		unreadEmailStatsService.incrementUnreadCount("srinjan-ghosh", "Inbox");
-		// unreadEmailStatsService.incrementUnreadCount("srinjan_ghosh", "Inbox");
-
-		unreadEmailStatsService.decrementUnreadCount("srinjan_ghosh", "Inbox");
-
-		for(int i=0;i<10;i++){
-			EmailListItemKey key = new EmailListItemKey();
-			key.setId("srinjan-ghosh");
-			key.setLabel("Inbox");
-			key.setTimeUuid(Calendar.getInstance().getTimeInMillis());
-
-			EmailListItem item = new EmailListItem();
-			item.setKey(key);
-			item.setTo(Arrays.asList("srinjan-ghosh", "xyz"));
-			item.setSubject("Subject"+i);
-			item.setUnread(true);
-
-			emailListItemRepository.save(item);
-
-			Email email = new Email();
-			email.setId(key.getTimeUuid());
-			email.setFrom("srinjan-ghosh");
-			email.setSubject(item.getSubject());
-			email.setBody("Body"+i);
-			email.setTo(item.getTo());
-
-			emailRepository.save(email);
+		for(int i=1;i<=10;i++){
+			emailService.sendEmail("srinjan-ghosh", Arrays.asList("srinjan-ghosh","abc"), "Hello "+i, "Body");
 		}
 
 	}

@@ -3,6 +3,7 @@ package com.example.mail_app.mail_app.inbox.controllers;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class ComposeController {
 
         List<Folder> defaultFolders = folderService.fetchDefaultFolders(userId);
         model.addAttribute("defaultFolders", defaultFolders);
+
+        Map<String, Integer> mapCountToLabels = folderService.mapCountToLabels(userId);
+        model.addAttribute("stats", mapCountToLabels); 
 
         List<String> uniqueToIds = splitToIds(to);
         // possible bug -> reply all will also send to the recipient

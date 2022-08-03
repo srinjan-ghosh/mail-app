@@ -1,6 +1,7 @@
 package com.example.mail_app.mail_app.inbox.controllers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class EmailViewController {
 
         List<Folder> defaultFolders = folderService.fetchDefaultFolders(userId);
         model.addAttribute("defaultFolders", defaultFolders);
+
+        Map<String, Integer> mapCountToLabels = folderService.mapCountToLabels(userId);
+        model.addAttribute("stats", mapCountToLabels); 
 
         // show the emails
         Optional<Email> optionalEmail = emailRepository.findById(id);
