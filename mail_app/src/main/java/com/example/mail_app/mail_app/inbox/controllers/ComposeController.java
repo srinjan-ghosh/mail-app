@@ -38,7 +38,7 @@ public class ComposeController {
         @RequestParam(required = false) String to
     ) {
 
-        if(principal == null){
+        if(principal == null || !StringUtils.hasText(principal.getAttribute("login"))){
             return "index";
         }
         
