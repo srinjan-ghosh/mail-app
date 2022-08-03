@@ -21,6 +21,9 @@ import com.example.mail_app.mail_app.inbox.emailList.EmailListItemKey;
 import com.example.mail_app.mail_app.inbox.emailList.EmailListItemRepository;
 import com.example.mail_app.mail_app.inbox.folders.Folder;
 import com.example.mail_app.mail_app.inbox.folders.FolderRepository;
+import com.example.mail_app.mail_app.inbox.folders.UnreadEmailStats;
+import com.example.mail_app.mail_app.inbox.folders.UnreadEmailStatsRepository;
+import com.example.mail_app.mail_app.inbox.folders.UnreadEmailStatsService;
 
 @SpringBootApplication
 @EnableMongoRepositories
@@ -30,6 +33,8 @@ public class MailAppApplication {
 	@Autowired FolderRepository folderRepository;
 	@Autowired EmailListItemRepository emailListItemRepository;
 	@Autowired EmailRepository emailRepository;
+	@Autowired UnreadEmailStatsRepository unreadEmailStatsRepository;
+	@Autowired UnreadEmailStatsService unreadEmailStatsService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MailAppApplication.class, args);
@@ -53,6 +58,15 @@ public class MailAppApplication {
 		folderRepository.save(new Folder("srinjan-ghosh", "User Inbox", "blue"));
 		folderRepository.save(new Folder("srinjan-ghosh", "Sent", "green"));
 		folderRepository.save(new Folder("srinjan-ghosh", "Important", "yellow"));
+
+		unreadEmailStatsRepository.save(new UnreadEmailStats("srinjan-ghosh", "Inbox", 0));
+
+		unreadEmailStatsService.incrementUnreadCount("srinjan-ghosh", "Inbox");
+		unreadEmailStatsService.incrementUnreadCount("srinjan-ghosh", "Inbox");
+		unreadEmailStatsService.incrementUnreadCount("srinjan-ghosh", "Inbox");
+		// unreadEmailStatsService.incrementUnreadCount("srinjan_ghosh", "Inbox");
+
+		unreadEmailStatsService.decrementUnreadCount("srinjan_ghosh", "Inbox");
 
 		for(int i=0;i<10;i++){
 			EmailListItemKey key = new EmailListItemKey();

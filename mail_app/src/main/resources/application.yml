@@ -11,3 +11,7 @@ spring:
             uri: mongodb+srv://root:root1234@cluster0.g5s6e.mongodb.net/?retryWrites=true&w=majority
             database: mailApp
 
+logging:
+    level:
+        org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+
